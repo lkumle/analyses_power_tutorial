@@ -10,6 +10,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # ------------------------------------------------------------------------- #
 # ----- SCENARIO 1 ------- #
+# ------------------------------------------------------------------------- #
 
 #### load and preprocessed data
 # --> full analysis and preprocessing script and data can be downloaded here: >>> include link <<<
@@ -30,7 +31,7 @@ FLPmodel <- lmer(flp ~ word_length * complexity + (1|subject) + (1|sentence),
 
 
 
-
+# --------------------- #
 #### simr analysis
 
 # powerSim
@@ -45,6 +46,7 @@ powerC <- powerCurve(artificial_pC, test= fixed("complexity"), along = "subject"
 save(power, file = "simr_powerC_scenario1_snc.Rdata")
 
 
+# --------------------- #
 #### mixedpower
 
 power_FLP <- mixedpower(model_emp = FLPmodel, data_emp = YanData,
@@ -56,6 +58,7 @@ save(power_FLP, file = "mixedpower_scenario1.Rdata")
 
 multiplotPower(power_FLP)
 
+# --------------------- #
 # SESOI
 FLPmodel_SESOI <- FLPmodel
 FLPmodel_SESOI@beta <- c(1, -0.05, 0.05)
@@ -70,7 +73,10 @@ save(power_SESOI, file = "mixedpower_SESOI_scenario1.Rdata")
 
 # ------------------------------------------------------------------------- #
 ### ------ SCENARIO 2  ------ ##
+# ------------------------------------------------------------------------- #
 
+
+# ----------- 1) SIMPLE ---- #
 power_sentences <- mixedpower(model = FLPmodel, data = YanData,
                         fixed_effects = c("word_length", "complexity"),
                         simvar = "sentence", steps = c(80,100,120,140,160),
@@ -79,6 +85,7 @@ power_sentences <- mixedpower(model = FLPmodel, data = YanData,
 save(power_sentences, file = "mixedpower_scenario2_48subjects.Rdata")
 
 
+# ----------- 2) ADVANCEF ---- #
 ## simulate power for range of sentences and one specific sample size
 
 # ----- start with 25
@@ -125,3 +132,8 @@ power40_sentences <- mixedpower(model = FLPmodel_40_SESOI, data = data,
                                 fixed_effects = c("word_length", "complexity"),
                                 simvar = "sentence", steps = c(80,100,120,140,160),
                                 critical_value = 2, n_sim = 1000)
+
+# ------------------------------------------------------------------------- #
+### ------ SCENARIO 3  ------ ##
+# ------------------------------------------------------------------------- #
+
