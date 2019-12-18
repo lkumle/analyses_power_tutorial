@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------- #
-#               ANANYSES INLCUDED IN BRM MANUSCRIPT                         # 
+#               ANANYSES INLCUDED IN BRM MANUSCRIPT                         #
 # ------------------------------------------------------------------------- #
 
 library(lme4)
@@ -11,20 +11,20 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # ------------------------------------------------------------------------- #
 # ----- SCENARIO 1 ------- #
 
-#### load and preprocessed data 
+#### load and preprocessed data
 # --> full analysis and preprocessing script and data can be downloaded here: >>> include link <<<
 load("Yan_et_al.RData")
 
-YanData <- data
 
-# rename variables for demonstartion reasons 
+
+# rename variables for demonstartion reasons
 data["word_length"] <- data$wl.c
 data["complexity"] <- data$sn.c
 data["subject"] <- data$nsub
 data["sentence"] <- data$nsen
 
-
-#### fit model intended for simulation 
+YanData <- data
+#### fit model intended for simulation
 FLPmodel <- lmer(flp ~ word_length * complexity + (1|subject) + (1|sentence),
                  data=data)
 
@@ -45,10 +45,10 @@ powerC <- powerCurve(artificial_pC, test= fixed("complexity"), along = "subject"
 save(power, file = "simr_powerC_scenario1_snc.Rdata")
 
 
-#### mixedpower 
+#### mixedpower
 
-power_FLP <- mixedpower(model_emp = FLPmodel, data_emp = YanData, 
-                        fixed_effects = c("word_length", "complexity"),  
+power_FLP <- mixedpower(model_emp = FLPmodel, data_emp = YanData,
+                        fixed_effects = c("word_length", "complexity"),
                         simvar = "subject", steps = c(20,30,40,50,60),
                         critical_value = 2, n_sim = 1000)
 
@@ -60,8 +60,8 @@ multiplotPower(power_FLP)
 FLPmodel_SESOI <- FLPmodel
 FLPmodel_SESOI@beta <- c(1, -0.05, 0.05)
 
-power_SESOI <- mixedpower(model = FLPmodel_SESOI, data = YanData, 
-                          fixed_effects = c("word_length", "complexity"),  
+power_SESOI <- mixedpower(model = FLPmodel_SESOI, data = YanData,
+                          fixed_effects = c("word_length", "complexity"),
                           simvar = "subject", steps = c(20,30,40,50,60),
                           critical_value = 2, n_sim = 1000)
 
@@ -71,18 +71,57 @@ save(power_SESOI, file = "mixedpower_SESOI_scenario1.Rdata")
 # ------------------------------------------------------------------------- #
 ### ------ SCENARIO 2  ------ ##
 
-power_sentences <- mixedpower(model_emp = FLPmodel, data_emp = YanData, 
-                        fixed_effects = c("word_length", "complexity"),  
+power_sentences <- mixedpower(model = FLPmodel, data = YanData,
+                        fixed_effects = c("word_length", "complexity"),
                         simvar = "sentence", steps = c(80,100,120,140,160),
                         critical_value = 2, n_sim = 1000)
 
 save(power_sentences, file = "mixedpower_scenario2_48subjects.Rdata")
 
 
-## simulate power for range of sentences and one specific sample size 
+## simulate power for range of sentences and one specific sample size
 
-#customized data set for n = 20 
-Yandata_20 <- simulateDataset(20, YanData, FLPmodel, simvar = "subjects")
+# ----- start with 25
 
+FLPmodel_20 <- simulateModel(FLPmodel, data, n_want = 20, simvar = "subject", nsim = 100)
 
+summary(FLPmodel_25)
 
+power20_sentences <- mixedpower(model = FLPmodel_20, data = data,
+                              fixed_effects = c("word_length", "complexity"),
+                              simvar = "sentence", steps = c(80,100,120,140,160),
+                              critical_value = 2, n_sim = 1000)
+
+# ---- same with 40
+
+FLPmodel_40 <- simulateModel(FLPmodel, data, n_want = 40, simvar = "subject", nsim = 100)
+
+summary(FLPmodel_25)
+
+power40_sentences <- mixedpower(model = FLPmodel_40, data = data,
+                                fixed_effects = c("word_length", "complexity"),
+                                simvar = "sentence", steps = c(80,100,120,140,160),
+                                critical_value = 2, n_sim = 1000)
+
+# ----- SESOI --- #
+# start with 25
+
+FLPmodel_20_SESOI <- simulateModel(FLPmodel_SESOI, data, n_want = 20, simvar = "subject", nsim = 100)
+
+summary(FLPmodel_25)
+
+power20_sentences <- mixedpower(model = FLPmodel_20_sentences, data = data,
+                                fixed_effects = c("word_length", "complexity"),
+                                simvar = "sentence", steps = c(80,100,120,140,160),
+                                critical_value = 2, n_sim = 1000)
+
+# same with 40
+
+FLPmodel_40_SESOI <- simulateModel(FLPmodel_SESOI, data, n_want = 40, simvar = "subject", nsim = 100)
+
+summary(FLPmodel_25)
+
+power40_sentences <- mixedpower(model = FLPmodel_40_SESOI, data = data,
+                                fixed_effects = c("word_length", "complexity"),
+                                simvar = "sentence", steps = c(80,100,120,140,160),
+                                critical_value = 2, n_sim = 1000)
