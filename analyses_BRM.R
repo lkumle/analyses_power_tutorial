@@ -92,46 +92,53 @@ save(power_sentences, file = "mixedpower_scenario2_48subjects.Rdata")
 
 FLPmodel_20 <- simulateModel(FLPmodel, data, n_want = 20, simvar = "subject", nsim = 100)
 
-summary(FLPmodel_25)
 
 power20_sentences <- mixedpower(model = FLPmodel_20, data = data,
                               fixed_effects = c("word_length", "complexity"),
                               simvar = "sentence", steps = c(80,100,120,140,160),
                               critical_value = 2, n_sim = 1000)
 
+save(power20_sentences, file = "mixedpower_scenario2_20subjects.Rdata")
+
 # ---- same with 40
 
 FLPmodel_40 <- simulateModel(FLPmodel, data, n_want = 40, simvar = "subject", nsim = 100)
 
-summary(FLPmodel_25)
+
 
 power40_sentences <- mixedpower(model = FLPmodel_40, data = data,
                                 fixed_effects = c("word_length", "complexity"),
                                 simvar = "sentence", steps = c(80,100,120,140,160),
                                 critical_value = 2, n_sim = 1000)
 
+save(power40_sentences, file = "mixedpower_scenario2_40subjects.Rdata")
+
 # ----- SESOI --- #
 # start with 25
 
 FLPmodel_20_SESOI <- simulateModel(FLPmodel_SESOI, data, n_want = 20, simvar = "subject", nsim = 100)
 
-summary(FLPmodel_25)
 
-power20_sentences <- mixedpower(model = FLPmodel_20_sentences, data = data,
+
+power20_sentences_SESOI <- mixedpower(model = FLPmodel_20_sentences, data = data,
                                 fixed_effects = c("word_length", "complexity"),
                                 simvar = "sentence", steps = c(80,100,120,140,160),
                                 critical_value = 2, n_sim = 1000)
+
+save(power20_sentences_SESOI, file = "mixedpower_scenario2_20subjects_SESOI.Rdata")
 
 # same with 40
 
 FLPmodel_40_SESOI <- simulateModel(FLPmodel_SESOI, data, n_want = 40, simvar = "subject", nsim = 100)
 
-summary(FLPmodel_25)
 
-power40_sentences <- mixedpower(model = FLPmodel_40_SESOI, data = data,
+
+power40_sentences_SESOI <- mixedpower(model = FLPmodel_40_SESOI, data = data,
                                 fixed_effects = c("word_length", "complexity"),
                                 simvar = "sentence", steps = c(80,100,120,140,160),
                                 critical_value = 2, n_sim = 1000)
+
+save(power40_sentences_SESOI, file = "mixedpower_scenario2_40subjects_SESOI.Rdata")
 
 # ------------------------------------------------------------------------- #
 ### ------ SCENARIO 3  ------ ##
