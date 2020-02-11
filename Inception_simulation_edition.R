@@ -51,7 +51,7 @@ FLPmodel <- lmer(flp ~ word_length * complexity + (1|subject) + (1|sentence),
 for(nsim in nsims){
 
   # repeat simulation 20 times 
-  for (i in 1:2){
+  for (i in 1:20){
     
     # record time
     start <- Sys.time()
