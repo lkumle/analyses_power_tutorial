@@ -12,7 +12,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # ------------------------------------------------------------------------- #
 # NUMBER OF SIMULATIONS IN MIXEDPOWER
 
-# repeat simulations 10 times with different nsim 
+# repeat simulations 20 times with different nsim 
 # --> record time to see how fast this is
 
 
@@ -73,6 +73,8 @@ for(nsim in nsims){
 
 # save stuff just to be sure!
 save(sim_results, file = "nsim_simulations.Rdata")
+
+save(run_times, file = "run_times.Rdata")
 
 # ------------------------- #
 # ANALYSE RESULTS
