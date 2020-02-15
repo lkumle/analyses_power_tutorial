@@ -74,7 +74,7 @@ power_FLP <- mixedpower(model = FLPmodel, data = YanData,
                         fixed_effects = c("word_length", "complexity"),
                         simvar = "subject", steps = c(20,30,40,50,60),
                         critical_value = 2, n_sim = 1000, 
-                        SESOI = SESOI, databased = F)
+                        SESOI = SESOI, databased = T)
 
 save(power_FLP, file = "mixedpower_scenario1_SESOI_DB.Rdata")
 
@@ -116,13 +116,13 @@ power20_sentences <- R2power(model = FLPmodel, data = YanData,
 save(power20_sentences, file = "mixedpower_scenario2_20subjects.Rdata")
 
 # ---- same with 60
-power40_sentences <- R2power(model = FLPmodel_40, data = data,
+power60_sentences <- R2power(model = FLPmodel, data = YanData,
                                 fixed_effects = c("word_length", "complexity"),
                                 simvar = "sentence", steps = c(80,100,120,140,160),
                                 R2var = "subject", R2level = 60, critical_value = 2,
                                 n_sim = 1000, SESOI = SESOI, databased = T)
 
-save(power40_sentences, file = "mixedpower_scenario2_60subjects.Rdata")
+save(power60_sentences, file = "mixedpower_scenario2_60subjects.Rdata")
 
 
 # ------------------------------------------------------------------------- #
