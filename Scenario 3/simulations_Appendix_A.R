@@ -141,8 +141,8 @@ sigma <- 0.26
 # prepare storing power output 
 sim_results <- data.frame(matrix(nrow = 9, ncol = 7))
 names(sim_results) <- c("20", "30" ,"40","50", "60", "effect", "balance") 
-sim_results$effect <- rep(c("NativeLanguage","Frequency","NativeLanguage:Frequency"), 4)
-sim_results$dist <- c(rep("80/20",3), rep("65/35" ,3), rep("50/50",3))
+sim_results$effect <- rep(c("NativeLanguage","Frequency","NativeLanguage:Frequency"), 3)
+sim_results$balance <- c(rep("80/20",3), rep("65/35" ,3), rep("50/50",3))
 
 # vary balance
 balance <- c(0.8, 0.65, 0.5)
