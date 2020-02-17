@@ -50,7 +50,7 @@ for (i in 1:length(distributions)){
   
   print("new dist")
   # create vector for data set: Multiply by 20 as we have 20 subject in our artificial data set who each respond to all words
-  frequency <- rnorm(100, mean = 5, sd = 2)
+  frequency <- distributions[[i]]
   artificial_data["Frequency"] <- frequency # add to data set 
   
   # prepare model 
