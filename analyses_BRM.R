@@ -141,11 +141,11 @@ artificial_data <- expand.grid(Word = (1:100), Subject = (1:20))
 
 # 2. FIXED EFFECTS
 
-#  generate frequency ratings [This step should be replaced with actual ratings!]
-frequency_ratings <- runif(100)
+#  generate frequency ratings 
+frequency_ratings <- rnorm(100, mean = 5, sd = 1)
 
 # repeat for every subject in data (20 times)
-artificial_data["Frequency"] <- sort(rep(frequency_ratings, 20))
+artificial_data["Frequency"] <- rep(frequency_ratings, 20)
 
 
 # include native language

@@ -4,7 +4,7 @@
 
 rm(list = ls())
 
-library(simr)
+,library(simr)
 library(mixedpower)
 
 # ------------------------------------------------------------------------- #
@@ -20,7 +20,7 @@ artificial_data["NativeLanguage"] <- c(rep(-0.5, 1000), rep(0.5, 1000))
 
 # create different frequency ratings to loop through later
 normal1 <- rnorm(100, mean = 5, sd = 1)
-normal2 <- rnorm(100, mean = 0.5, sd = 0.1)
+normal2 <- rnorm(100, mean = 7.5, sd = 1.5)
 normal3 <- rnorm(100, mean = 2.5, sd = 0.5)
 
 

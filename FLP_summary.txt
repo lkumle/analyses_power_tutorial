@@ -1,0 +1,29 @@
+Linear mixed model fit by REML ['lmerMod']
+Formula: flp ~ word_length * complexity + (1 | subject) + (1 | sentence)
+   Data: data
+
+REML criterion at convergence: 54454.3
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0880 -0.6547  0.0432  0.6640  5.6162 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sentence (Intercept) 0.05544  0.2355  
+ subject  (Intercept) 0.35482  0.5957  
+ Residual             3.20984  1.7916  
+Number of obs: 13523, groups:  sentence, 120; subject, 48
+
+Fixed effects:
+                       Estimate Std. Error t value
+(Intercept)             3.66181    0.09081  40.323
+word_length             1.51191    0.04605  32.832
+complexity             -0.07534    0.02531  -2.977
+word_length:complexity  0.11581    0.03293   3.517
+
+Correlation of Fixed Effects:
+            (Intr) wrd_ln cmplxt
+word_length -0.043              
+complexity   0.056 -0.727       
+wrd_lngth:c -0.129  0.315 -0.441
