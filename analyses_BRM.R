@@ -35,39 +35,12 @@ YanData <- data
 FLPmodel <- lmer(flp ~ word_length * complexity + (1|subject) + (1|sentence),
                  data=data)
 
-sink('FLP_summary.txt')
-
-summary(FLPmodel)
-sink()
-
-
-# --------------------- #
-#### SIMR ANALYSIS
-
-# powerSim
-power_complexity <- powerSim(fit = FLPmodel, test = fixed("complexity"), nsim = 100)
-
-sink("powerSim_output.txt")
-print(power_complexity)
-sink()
-
-save(power_complexity, file = "simrpower_scenario1_snc.Rdata")
-
-# powerCurve
-artificial_pC <- extend(FLPmodel, along="subject", n = 60) # extend model/data
-
-powerC <- powerCurve(artificial_pC, test= fixed("complexity"), along = "subject", breaks =c(20,30,40,60), nsim = 100)
-save(power, file = "simr_powerC_scenario1_snc.Rdata")
-
-sink('powerCurve_output.txt')
-print(powerC)
-sink()
 
 # --------------------- #
 #### MIXEDPOWER + SESOI
 # --> we can get both results in one simulation
 
-SESOI <- c(3.66, 1, -0.05, 0.05)
+SESOI <- c(3.66, 0.75, -0.065, 0.09)
 
 # only SESOI, not databased (we already did this in the simulation above)
 power_FLP <- mixedpower(model = FLPmodel, data = YanData,
@@ -78,12 +51,8 @@ power_FLP <- mixedpower(model = FLPmodel, data = YanData,
 
 save(power_FLP, file = "mixedpower_scenario1_SESOI_DB.Rdata")
 
-# get a text file of output to include it in Latex file 
-sink("mixedpower_S1.txt")
-print(power_FLP)
-sink()
 
-
+multiplotPower(power_FLP, filename = "mixedpower_S1.png")
 
 
 # ------------------------------------------------------------------------- #
@@ -96,33 +65,41 @@ sink()
 #    - only vary sentences (+ SESOI)
 power_sentences <- mixedpower(model = FLPmodel, data = YanData,
                         fixed_effects = c("word_length", "complexity"),
-                        simvar = "sentence", steps = c(80,100,120,140,160),
+                        simvar = "sentence", steps = c(100,120,140,160, 180),
                         critical_value = 2, n_sim = 1000, SESOI = SESOI)
 
 save(power_sentences, file = "mixedpower_scenario2_48subjects.Rdata")
 
+# ----- confirm with R2: should be very similar!
+power48_sentences <- R2power(model = FLPmodel, data = YanData,
+                             fixed_effects = c("word_length", "complexity"),
+                             simvar = "sentence", steps = c(100,120,140,160, 180),
+                             R2var = "subject", R2level = 48,  critical_value = 2, 
+                             n_sim = 1000, SESOI = SESOI, databased = T)
+
+save(power48_sentences, file = "R2_S2_48subjects.Rdata")
 
 # ----------------- #
 # 1) ADVANCED
 #    - vary sentences and subject 
 
-# ----- start with 25
-power20_sentences <- R2power(model = FLPmodel, data = YanData,
+# ----- start with 30
+power30_sentences <- R2power(model = FLPmodel, data = YanData,
                              fixed_effects = c("word_length", "complexity"),
-                             simvar = "sentence", steps = c(80,100,120,140,160),
-                             R2var = "subject", R2level = 20,  critical_value = 2, 
+                             simvar = "sentence", steps = c(100,120,140,160,180),
+                             R2var = "subject", R2level = 30,  critical_value = 2, 
                              n_sim = 1000, SESOI = SESOI, databased = T)
 
-save(power20_sentences, file = "mixedpower_scenario2_20subjects.Rdata")
+save(power20_sentences, file = "R2_S2_30subjects.Rdata")
 
 # ---- same with 60
 power60_sentences <- R2power(model = FLPmodel, data = YanData,
                                 fixed_effects = c("word_length", "complexity"),
-                                simvar = "sentence", steps = c(80,100,120,140,160),
+                                simvar = "sentence", steps = c(100,120,140,160, 180),
                                 R2var = "subject", R2level = 60, critical_value = 2,
                                 n_sim = 1000, SESOI = SESOI, databased = T)
 
-save(power60_sentences, file = "mixedpower_scenario2_60subjects.Rdata")
+save(power60_sentences, file = "R2_S2_60subjects.Rdata")
 
 
 # ------------------------------------------------------------------------- #
@@ -159,3 +136,20 @@ artificial_lmer <- makeLmer(formula = speed ~ NativeLanguage * Frequency + (1 | 
 
 
 # ------ POWER ------- # 
+
+# SIMR 
+power_simr <- powerSim(fit = artificial_lmer, test = fixed("NativeLanguage"), nsim = 100)
+
+save(power_simr,  file = "S3_simr_NL.Rdata")
+
+# mixedpower
+
+power <- mixedpower(model = FLPmodel, data = YanData,
+                       fixed_effects = c("word_length", "complexity"),
+                       simvar = "subject", steps = c(20,30,40,50,60),
+                       critical_value = 2, n_sim = 1000, 
+                       SESOI = c(1.7, -0.2, 0.017, 0.027))
+
+multiplotPower(power)
+
+save(power_S3, file = "S3_mixedpower.Rdata")
