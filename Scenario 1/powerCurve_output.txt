@@ -1,8 +1,0 @@
-Power for predictor 'complexity', (95% confidence interval),
-by number of levels in subject:
-     20: 41.00% (31.26, 51.29) - 5662 rows
-     30: 58.00% (47.71, 67.80) - 8523 rows
-     40: 72.00% (62.13, 80.52) - 11093 rows
-     60: 84.00% (75.32, 90.57) - 16934 rows
-
-Time elapsed: 73 h 56 m 18 s
