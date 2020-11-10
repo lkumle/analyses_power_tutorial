@@ -6,7 +6,7 @@ last update: November 2020
 
 ***
 
-#### Link to Notebooks:  https://lkumle.github.io/power_notebooks/
+### Link to Notebooks:  https://lkumle.github.io/power_notebooks/
 
 **Scenario 1:** [Using an available well-powered design as a starting point
 ](https://lkumle.github.io/power_notebooks/Scenario1_notebook.html)
@@ -19,7 +19,7 @@ last update: November 2020
 
 **Nested Designs:** [A GLMM example](https://lkumle.github.io/power_notebooks/nestedGLMM_notebook.html)
 
-#### mixedpower package
+### mixedpower package
 
 **Dokumentation:** https://lkumle.github.io/power_notebooks/intro/Introduction_to_mixedpower.pdf
 
