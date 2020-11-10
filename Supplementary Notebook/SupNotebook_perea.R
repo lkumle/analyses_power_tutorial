@@ -15,6 +15,7 @@ library(lme4)
 library(mixedpower)
 library(readxl)
 library(tictoc)
+library(tidyverse)
 
 #-----------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------#
@@ -44,6 +45,7 @@ perea3$invRT <- -1000/perea3$RT
 
 fit <- lmer(invRT ~ REPETITION + (1|ITEM) + (REPETITION|SUBJECT), data=perea3) 
 
+# mixedpower():
 power_15ms  <- mixedpower(model = fit, data = perea3,
                            fixed_effects = c("REPETITION"),
                            simvar = "ITEM", steps = c(120),
@@ -51,6 +53,16 @@ power_15ms  <- mixedpower(model = fit, data = perea3,
                            SESOI = F, databased = T)
 
 save(power_15ms, file = "Perea_15ms.Rdata")
+
+# R2power():
+power_15ms  <- R2power(model = fit, data = perea3,
+                          fixed_effects = c("REPETITION"),
+                          simvar = "ITEM", steps = c(120),
+                          critical_value = 2, n_sim = 1000,
+                          SESOI = F, databased = T, 
+                          R2var = "SUBJECT", R2level = 40)
+
+save(power_15ms, file = "Perea_15ms_R2power.Rdata")
 
 # simr 
 power_15ms_simr <- powerSim(fit,nsim=1000)
@@ -65,6 +77,7 @@ perea3$invRT <- -1000/perea3$RT
 
 fit <- lmer(invRT ~ REPETITION + (1|ITEM) + (REPETITION|SUBJECT), data=perea3) 
 
+# mixedpower():
 power_12ms  <- mixedpower(model = fit, data = perea3,
                           fixed_effects = c("REPETITION"),
                           # use same steps as simr in powerCurve
@@ -72,7 +85,19 @@ power_12ms  <- mixedpower(model = fit, data = perea3,
                           critical_value = 2, n_sim = 1000,
                           SESOI = F, databased = T)
 
+
 save(power_12ms, file = "Perea_12ms.Rdata")
+
+# R2power():
+power_12ms  <- R2power(model = fit, data = perea3,
+                          fixed_effects = c("REPETITION"),
+                          simvar = "ITEM", steps = c(120),
+                          critical_value = 2, n_sim = 1000,
+                          SESOI = F, databased = T, 
+                          R2var = "SUBJECT", R2level = 40)
+
+save(power_12ms, file = "Perea_12ms_R2power.Rdata")
+
 
 # simr 
 power_12ms_simr <- powerSim(fit,nsim=1000)
@@ -86,6 +111,7 @@ perea3$invRT <- -1000/perea3$RT
 
 fit <- lmer(invRT ~ REPETITION + (1|ITEM) + (REPETITION|SUBJECT), data=perea3) 
 
+# mixepower():
 power_10ms  <- mixedpower(model = fit, data = perea3,
                           fixed_effects = c("REPETITION"),
                           # use same steps as simr in powerCurve
@@ -94,6 +120,16 @@ power_10ms  <- mixedpower(model = fit, data = perea3,
                           SESOI = F, databased = T)
 
 save(power_10ms, file = "Perea_10ms.Rdata")
+
+# R2power():
+power_10ms  <- R2power(model = fit, data = perea3,
+                          fixed_effects = c("REPETITION"),
+                          simvar = "ITEM", steps = c(120),
+                          critical_value = 2, n_sim = 1000,
+                          SESOI = F, databased = T, 
+                          R2var = "SUBJECT", R2level = 40)
+
+save(power_10ms, file = "Perea_10ms_R2power.Rdata")
 
 # simr 
 power_10ms_simr <- powerSim(fit,nsim=1000)
@@ -107,6 +143,7 @@ perea3$invRT <- -1000/perea3$RT
 
 fit <- lmer(invRT ~ REPETITION + (1|ITEM) + (REPETITION|SUBJECT), data=perea3) 
 
+# mixedpower():
 power_7ms  <- mixedpower(model = fit, data = perea3,
                           fixed_effects = c("REPETITION"),
                           # use same steps as simr in powerCurve
@@ -115,6 +152,16 @@ power_7ms  <- mixedpower(model = fit, data = perea3,
                           SESOI = F, databased = T)
 
 save(power_7ms, file = "Perea_7ms.Rdata")
+
+# R2power():
+power_7ms  <- R2power(model = fit, data = perea3,
+                          fixed_effects = c("REPETITION"),
+                          simvar = "ITEM", steps = c(120),
+                          critical_value = 2, n_sim = 1000,
+                          SESOI = F, databased = T, 
+                          R2var = "SUBJECT", R2level = 40)
+
+save(power_7ms, file = "Perea_7ms_R2power.Rdata")
 
 # simr 
 power_7ms_simr <- powerSim(fit,nsim=1000)
@@ -128,7 +175,7 @@ perea3$invRT <- -1000/perea3$RT
 fit <- lmer(invRT ~ REPETITION + (1|ITEM) + (REPETITION|SUBJECT), data=perea3)
 
 
-
+# mixedpower()
 power_5ms  <- mixedpower(model = fit, data = perea3,
                           fixed_effects = c("REPETITION"),
                           # use same steps as simr in powerCurve
@@ -137,6 +184,16 @@ power_5ms  <- mixedpower(model = fit, data = perea3,
                           SESOI = F, databased = T)
 
 save(power_5ms, file = "Perea_5ms.Rdata")
+
+# R2power():
+power_5ms  <- R2power(model = fit, data = perea3,
+                          fixed_effects = c("REPETITION"),
+                          simvar = "ITEM", steps = c(120),
+                          critical_value = 2, n_sim = 1000,
+                          SESOI = F, databased = T, 
+                          R2var = "SUBJECT", R2level = 40)
+
+save(power_5ms, file = "Perea_5ms_R2power.Rdata")
 
 # simr 
 power_5ms_simr <- powerSim(fit,nsim=1000)
@@ -164,7 +221,7 @@ plot(power_sub)
 
 
 
-## power analysis with mixedpower
+## power analysis with mixedpower()
 
 power_subs  <- mixedpower(model = fit_15ms, data = perea3,
                           fixed_effects = c("REPETITION"),
@@ -184,6 +241,26 @@ power_items  <- mixedpower(model = fit_15ms, data = perea3,
 
 save(power_items, file = "Perea_along_items.Rdata")
 
+## power analysis with R2power()
+
+power_subs_R2  <- R2power(model = fit, data = perea3,
+                         fixed_effects = c("REPETITION"),
+                         simvar = "SUBJECT", steps = c(3,7,11,15,19,24,28,32,36,40),
+                         critical_value = 2, n_sim = 1000,
+                         SESOI = F, databased = T, 
+                         R2var = "ITEM", R2level = 120)
+
+save(power_subs_R2, file = "Perea_along_subs_R2.Rdata")
+
+
+power_item_R2  <- R2power(model = fit, data = perea3,
+                             fixed_effects = c("REPETITION"),
+                             simvar = "ITEM", steps = c(3, 16, 29, 42, 55, 68, 81, 94, 107, 120),
+                             critical_value = 2, n_sim = 1000,
+                             SESOI = F, databased = T, 
+                             R2var = "SUBJECT", R2level = 40)
+
+save(power_item_R2, file = "Perea_along_item_R2.Rdata")
 
 
 ## plot mixedpower
@@ -201,4 +278,21 @@ plot_subs$power <- plot_subs$power*100
 plot(plot_subs$step, plot_subs$power, xlab = "number of subjects", ylab = "power", 
      type = "o", col = "black", pch = 19, ylim = c(0,100))
 abline(h=80, col="black", lty = "dashed")
+
+
+## plot R2power
+plot_item_R2 <- gather(power_item_R2, key = "step", value = "power", `3`:`120`)
+plot_item_R2$power <- plot_item_R2$power*100
+
+plot(plot_item_R2$step, plot_item_R2$power, xlab = "number of items", ylab = "power", 
+     type = "o", col = "black", pch = 19, ylim = c(0,100))
+abline(h=80, col="black", lty = "dashed")
+
+plot_subs_R2 <- gather(power_subs_R2, key = "step", value = "power", `3`:`40`)
+plot_subs_R2$power <- plot_subs_R2$power*100
+
+plot(plot_subs_R2$step, plot_subs_R2$power, xlab = "number of subjects", ylab = "power", 
+     type = "o", col = "black", pch = 19, ylim = c(0,100))
+abline(h=80, col="black", lty = "dashed")
+
 

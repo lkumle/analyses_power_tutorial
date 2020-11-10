@@ -13,6 +13,8 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(languageR)
 data <- lexdec
 
+data <- data[,c("Subject", "Word", "NativeLanguage", "Correct", "Frequency")]
+
 # sum code native language
 data$Frequency <- scale(data$Frequency, scale = F)
 model <- glmer(Correct ~ NativeLanguage * Frequency + (1 | Subject) + (1 | Word), 
@@ -24,7 +26,6 @@ summary(model)
 # --------------------------------------------------------------------------- #
 # ---------------- general simulation for tutorial ---------------------------
 
-formula <- Correct ~ NativeLanguage * Frequency + (1 | Subject) + (1 | Word)
 
 
 # 1: RANDOM EFFECTS
@@ -39,7 +40,7 @@ frequency_ratings <- rnorm(100, mean = 5, sd = 1)
 
 # repeat for every subject in data (20 times)
 artificial_data["Frequency"] <- rep(frequency_ratings, 20)
-artificial_data$ScaledFrequency <- scale(artificial_data$Frequency, scale = F)
+artificial_data$CenteredFrequency <- scale(artificial_data$Frequency, scale = F)
 
 
 # include native language
@@ -47,7 +48,7 @@ artificial_data["NativeLanguage"] <- c(rep(-0.5, 1000), rep(0.5, 1000))
 
 
 # create model 
-artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * ScaledFrequency + (1 | Subject) + (1 | Word),
+artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * CenteredFrequency + (1 | Subject) + (1 | Word),
                               fixef = c(-4.3, 0.35, -0.4, -0.32), VarCorr = list(1.04, 0.65), 
                               family = "binomial",  data = artificial_data)
 
@@ -62,7 +63,7 @@ save(power_simr,  file = "S3_simr_NL_glmer.Rdata")
 # mixedpwoer
 
 power_S3 <- mixedpower(model = artificial_glmer, data = artificial_data,
-                       fixed_effects = c("NativeLanguage", "ScaledFrequency"),
+                       fixed_effects = c("NativeLanguage", "CenteredFrequency"),
                        simvar = "Subject", steps = c(20,60,100,140,180),
                        critical_value = 2, n_sim = 1000, 
                        SESOI = c(-4.3,  0.30 ,-0.34, -0.27))
@@ -82,8 +83,8 @@ save(power_S3, file = "S3_mixedpower_glmer.Rdata")
 # ------------------------------------------------------------------------- #
 # create different frequency ratings to loop through later
 normal1 <- rnorm(100, mean = 5, sd = 1)
-normal2 <- rnorm(100, mean = 5, sd = 5)
-normal3 <- rnorm(100, mean = 5, sd = 10)
+normal2 <- rnorm(100, mean = 5, sd = 0.5)
+normal3 <- rnorm(100, mean = 5, sd = 0.25)
 
 
 distributions <- list(normal1, normal2, normal3)
@@ -105,13 +106,13 @@ for (i in 1:length(distributions)){
   artificial_data$ScaledFrequency <- scale(artificial_data$Frequency, scale = F)
   
   # prepare model 
-  artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * ScaledFrequency + (1 | Subject) + (1 | Word),
+  artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * CenteredFrequency + (1 | Subject) + (1 | Word),
                                 fixef = c(-4.3, 0.36, -0.48, -0.39), VarCorr = list(1.04, 0.65), 
                                 family = "binomial",  data = artificial_data)
   
   # compute power
   power <- mixedpower(model = artificial_glmer, data = artificial_data,
-                      fixed_effects = c("NativeLanguage", "ScaledFrequency"),
+                      fixed_effects = c("NativeLanguage", "CenteredFrequency"),
                       simvar = "Subject", steps = c(20,60,100,140,180),
                       critical_value = 2, n_sim = 1000)
   
@@ -138,7 +139,7 @@ frequency_ratings <- rnorm(100, mean = 5, sd = 1)
 
 # repeat for every subject in data (20 times)
 artificial_data["Frequency"] <- rep(frequency_ratings, 20)
-artificial_data$ScaledFrequency <- scale(artificial_data$Frequency, scale = F)
+artificial_data$CenteredFrequency <- scale(artificial_data$Frequency, scale = F)
 
 
 # prepare storing power output 
@@ -160,18 +161,18 @@ for (i in 1:length(balance)){
   
   # prepare model 
   # prepare model 
-  artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * ScaledFrequency + (1 | Subject) + (1 | Word),
+  artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * CenteredFrequency + (1 | Subject) + (1 | Word),
                                 fixef = c(-4.3, 0.36, -0.48, -0.39), VarCorr = list(1.04, 0.65), 
                                 family = "binomial",  data = artificial_data)
   
   # compute power
   power <- mixedpower(model = artificial_glmer, data = artificial_data,
-                      fixed_effects = c("NativeLanguage", "ScaledFrequency"),
+                      fixed_effects = c("NativeLanguage", "CenteredFrequency"),
                       simvar = "Subject", steps = c(20,60,100,140,180),
                       critical_value = 2, n_sim = 1000)
   
   # store results
-  sim_results["20"][(3*i-2):(3*i),] <- power$`40`
+  sim_results["20"][(3*i-2):(3*i),] <- power$`20`
   sim_results["60"][(3*i-2):(3*i),] <- power$`60`
   sim_results["100"][(3*i-2):(3*i),] <- power$`100`
   sim_results["140"][(3*i-2):(3*i),] <- power$`140`
@@ -215,9 +216,11 @@ for (i in 1:3){
   random_variance <-  list(as.numeric(rand_vars[i,1]),as.numeric(rand_vars[i,2]))
   
   # prepare model 
-  artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * ScaledFrequency + (1 | Subject) + (1 | Word),
-                                fixef = c(-4.3, 0.36, -0.48, -0.39), VarCorr = random_variance, 
+  artificial_glmer <- makeGlmer(formula = Correct ~ NativeLanguage * CenteredFrequency + (1 | Subject) + (1 | Word),
+                                fixef = c(-4.3, 0.35, -0.4, -0.32), VarCorr = random_variance, 
                                 family = "binomial",  data = artificial_data)
+  
+  summary(artificial_glmer)
   
   # compute power
   power <- mixedpower(model = artificial_glmer, data = artificial_data,
@@ -226,7 +229,7 @@ for (i in 1:3){
                       critical_value = 2, n_sim = 1000)
   
   # store results
-  sim_results["20"][(3*i-2):(3*i),] <- power$`40`
+  sim_results["20"][(3*i-2):(3*i),] <- power$`20`
   sim_results["60"][(3*i-2):(3*i),] <- power$`60`
   sim_results["100"][(3*i-2):(3*i),] <- power$`100`
   sim_results["140"][(3*i-2):(3*i),] <- power$`140`
@@ -247,7 +250,7 @@ sigma <- 0.26
 
 # ------------------------------------------ #
 # CREATE LMER
-artificial_lmer <- makeLmer(formula = Speed ~ NativeLanguage * Frequency + (1 | Subject) + (1 | Word),
+artificial_lmer <- makeLmer(formula = Speed ~ NativeLanguage * CenteredFrequency + (1 | Subject) + (1 | Word),
                             fixef = fixed_effects, VarCorr = random_variance, sigma = sigma,
                             data = artificial_data)
 
