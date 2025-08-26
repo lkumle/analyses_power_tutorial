@@ -1,8 +1,8 @@
 ### Analyses linked to "Estimating power in (generalized) linear mixed models: an open introduction and tutorial in R"  
 
-Kumle, L., Vo, M. L-H., & Draschkow, D. (in preparation) 
+**Citation:**  
 
-last update: November 2020
+Kumle, L., Võ, M. L. H., & Draschkow, D. (2021). Estimating power in (generalized) linear mixed models: An open introduction and tutorial in R. Behavior research methods, 53(6), 2528-2543.
 
 ***
 
