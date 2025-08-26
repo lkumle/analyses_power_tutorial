@@ -2,6 +2,9 @@
 #      ANANYSES INLCUDED IN BRM MANUSCRIPT  SCENARIO 3                      #
 # ------------------------------------------------------------------------- #
 
+# edits: 
+# 26/08/25: Fix order of arguments in expand.grid(), line 36. 
+
 library(lme4)
 library(simr)
 library(mixedpower)
@@ -30,7 +33,7 @@ summary(model)
 
 # 1: RANDOM EFFECTS
 # including variables used as random effects in artificial data 
-artificial_data <- expand.grid(Subject = (1:20), Word = (1:100))
+artificial_data <- expand.grid(Word = (1:100), Subject = (1:20))
 
 
 # 2. FIXED EFFECTS
